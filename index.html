@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Random Question Game</title>
+  <style>
+    /* Basic mobile-first styles */
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      transition: background-color 0.5s ease;
+    }
+    .question-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow: hidden;
+      flex-direction: column;
+      font-size: 1.5rem;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
+    .question {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    /* Background colors for subcategories */
+    .Spicy {
+      background-color: #ff5f57;
+    }
+    .Offensive {
+      background-color: #ff9b57;
+    }
+    .Absurd {
+      background-color: #57ff8e;
+    }
+    .DoubleMeaning {
+      background-color: #57baff;
+    }
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      .question-container {
+        font-size: 1.2rem;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="question-container" id="questionContainer">
+    <div class="question" id="questionText">Click to start the game!</div>
+  </div>
+
+  <script>
+    const questions = [
+	{ id: 1, question: "Who is most likely to get engaged after knowing someone for just a week?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 2, question: "Who would break up with someone over text?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 3, question: "Who would keep a relationship secret from their family?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 4, question: "Who is most likely to fall in love with someone they've never met?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 5, question: "Who is most likely to give up their career for a relationship?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 6, question: "Who would confess their love in the most dramatic way?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 7, question: "Who is most likely to date their boss?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 8, question: "Who would write a love letter to win someone over?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 9, question: "Who is most likely to go on a reality dating show?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 10, question: "Who would start a romantic relationship with someone much older than them?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 11, question: "Who is most likely to ghost someone they went on a date with?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 12, question: "Who is most likely to secretly admire someone in this group?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 13, question: "Who would forgive a cheating partner?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 14, question: "Who is most likely to fall in love with their best friend?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 15, question: "Who would propose in a public place?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 16, question: "Who is most likely to fall for someone they met online?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 17, question: "Who would flirt with a stranger at a party?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 18, question: "Who is most likely to kiss someone on the first date?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 19, question: "Who would forget their partner's birthday?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 20, question: "Who is most likely to stay friends with an ex?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 21, question: "Who would be the most jealous partner?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 22, question: "Who is most likely to date someone just for their looks?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 23, question: "Who would argue over the smallest thing in a relationship?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 24, question: "Who is most likely to fall in love on a trip abroad?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 25, question: "Who would have the weirdest dating story?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 26, question: "Who is most likely to prioritize their career over relationships?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 27, question: "Who would fall for someone in a long-distance relationship?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 28, question: "Who is most likely to stalk their crush on social media?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 29, question: "Who would overanalyze every text in a relationship?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 30, question: "Who is most likely to date someone against their parents' wishes?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 31, question: "Who would be the worst at keeping a secret?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 32, question: "Who is most likely to lie about their achievements?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 33, question: "Who would exaggerate a minor injury for attention?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 34, question: "Who is most likely to forget their friend's birthday?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 35, question: "Who would write their own Wikipedia page?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 36, question: "Who is most likely to post an unflattering picture of someone online?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 37, question: "Who would laugh at an inappropriate moment?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 38, question: "Who is most likely to come late to their own wedding?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 39, question: "Who would make fun of someone's fashion choices?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 40, question: "Who is most likely to lose an argument but still claim they won?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 41, question: "Who is most likely to accidentally adopt a raccoon?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 42, question: "Who would try to ride an ostrich?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 43, question: "Who is most likely to fake an accent to impress someone?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 44, question: "Who would sell everything they own to join a circus?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 45, question: "Who is most likely to accidentally start a conspiracy theory?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 46, question: "Who would jump into a frozen lake on a dare?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 47, question: "Who is most likely to prank call someone famous?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 48, question: "Who would get stuck climbing out of a window?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 49, question: "Who is most likely to befriend a ghost?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 50, question: "Who would adopt 10 cats and name them all after themselves?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 51, question: "Who in the group is most likely to 'blow someone's mind' on a first date?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 52, question: "Who would 'go all the way' in making someone feel special?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 53, question: "Who in the group has the best 'package deal' to attract someone?", category: "Double Meaning", subcategory: "Physical Attraction" },
+	{ id: 54, question: "Who would 'press the wrong button' on a date?", category: "Double Meaning", subcategory: "Romantic Misadventures" },
+	{ id: 55, question: "Who is most likely to 'leave someone wanting more'?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 56, question: "Who would make their partner 'scream with excitement'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 57, question: "Who in the group has the 'smoothest moves'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 58, question: "Who would 'hit all the right spots' in a romantic setting?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 59, question: "Who is most likely to 'turn the heat up' during a date?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 60, question: "Who would 'go down' in the history of being romantic?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 61, question: "Who is most likely to plan the perfect romantic getaway?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 62, question: "Who would be caught sneaking out on a date?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 63, question: "Who is most likely to break someone's heart?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 64, question: "Who would start dating someone in this group?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 65, question: "Who is most likely to stay in a toxic relationship?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 66, question: "Who would write a cheesy love song?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 67, question: "Who is most likely to date someone who speaks a different language?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 68, question: "Who would propose with the most unusual ring?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 69, question: "Who is most likely to have a whirlwind romance?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 70, question: "Who would ghost someone and regret it later?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 71, question: "Who is most likely to leave someone hanging in an awkward situation?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 72, question: "Who would eat someone else's food without asking?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 73, question: "Who is most likely to wear the same outfit for a week?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 74, question: "Who would forget they were supposed to meet a friend?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 75, question: "Who is most likely to make a terrible first impression?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 76, question: "Who would send the wrong message to a group chat?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 77, question: "Who is most likely to fall asleep during a serious conversation?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 78, question: "Who would steal someone's thunder during a big moment?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 79, question: "Who is most likely to lose something important?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 80, question: "Who would laugh at their own jokes when no one else does?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 81, question: "Who is most likely to accidentally walk into the wrong restroom?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 82, question: "Who would win a staring contest with a statue?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 83, question: "Who is most likely to end up in a viral internet meme?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 84, question: "Who would eat something they found on the floor?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 85, question: "Who is most likely to try to train a wild animal?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 86, question: "Who would start speaking gibberish in an important meeting?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 87, question: "Who is most likely to get locked out of their own house?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 88, question: "Who would jump into a random stranger's car by mistake?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 89, question: "Who is most likely to get lost in a one-room building?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 90, question: "Who would try to cook something and end up with a disaster?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 91, question: "Who in the group is most likely to 'light a fire' in someone's heart?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 92, question: "Who would 'leave everyone hot and bothered' at a party?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 93, question: "Who is most likely to 'melt hearts' with their charm?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 94, question: "Who would 'turn the lights off for maximum effect'?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 95, question: "Who is most likely to 'spark the flame' of romance in a group setting?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 96, question: "Who would 'climb the ladder of love' the fastest?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 97, question: "Who in the group is most likely to 'explore uncharted territories' in love?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 98, question: "Who would 'take it slow and steady to win the race'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 99, question: "Who is most likely to 'go big or go home' in their romantic gestures?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 100, question: "Who would 'keep everyone guessing with their mysterious moves'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 101, question: "Who is most likely to accidentally send a romantic text to the wrong person?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 102, question: "Who would plan the most extravagant date night?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 103, question: "Who is most likely to date someone their friend has a crush on?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 104, question: "Who would confess their feelings in a group setting?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 105, question: "Who is most likely to cry during a romantic movie?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 106, question: "Who would fall for someone completely opposite to them?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 107, question: "Who is most likely to give terrible dating advice?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 108, question: "Who would have the most complicated love triangle?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 109, question: "Who is most likely to be dumped for being too clingy?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 110, question: "Who would plan a surprise romantic gesture for their partner?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 111, question: "Who is most likely to pretend they know something when they don't?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 112, question: "Who would accidentally spill someone's secret?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 113, question: "Who is most likely to skip paying their share of the bill?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 114, question: "Who would forget an important deadline?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 115, question: "Who is most likely to leave a mess and not clean it up?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 116, question: "Who would borrow something and never return it?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 117, question: "Who is most likely to brag about something trivial?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 118, question: "Who would get into an argument over something petty?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 119, question: "Who is most likely to make a joke that offends everyone?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 120, question: "Who would ditch plans at the last moment?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 121, question: "Who is most likely to accidentally start a food fight?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 122, question: "Who would believe in the most ridiculous conspiracy theory?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 123, question: "Who is most likely to dance in the middle of the street?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 124, question: "Who would mistake a mannequin for a real person?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 125, question: "Who is most likely to take a selfie in a completely inappropriate situation?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 126, question: "Who would end up buying something they don't need at an auction?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 127, question: "Who is most likely to get chased by a goose?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 128, question: "Who would end up in the background of someone's viral video?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 129, question: "Who is most likely to prank a friend and get pranked back worse?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 130, question: "Who would find a way to accidentally set off an alarm?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 131, question: "Who in the group is most likely to 'play hard to get' and succeed?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 132, question: "Who would 'set the mood just right' for a date?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 133, question: "Who is most likely to 'cross boundaries in a playful way'?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 134, question: "Who would 'test the waters' before diving into a relationship?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 135, question: "Who is most likely to 'take things to the next level' on a date?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 136, question: "Who would 'keep it spicy in a long-term relationship'?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 137, question: "Who in the group is most likely to 'light up someone's night'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 138, question: "Who would 'explore all avenues of attraction'?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 139, question: "Who is most likely to 'turn up the heat' during a romantic encounter?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 140, question: "Who would 'leave a lasting impression' on someone they just met?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 141, question: "Who is most likely to end a relationship over a silly argument?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 142, question: "Who would accidentally reveal they have a crush on someone?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 143, question: "Who is most likely to go on a date just for free food?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 144, question: "Who would send flowers to someone anonymously?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 145, question: "Who is most likely to turn down a date with a celebrity?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 146, question: "Who would argue with their partner over their favorite TV show?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 147, question: "Who is most likely to surprise their partner with a spontaneous trip?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 148, question: "Who would make an awkward move on their crush?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 149, question: "Who is most likely to have a secret admirer?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 150, question: "Who would share too much personal information on a first date?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 151, question: "Who is most likely to forget their own lie and get caught?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 152, question: "Who would laugh uncontrollably at an inappropriate moment?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 153, question: "Who is most likely to borrow money and never pay it back?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 154, question: "Who would eat all the snacks at a party without sharing?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 155, question: "Who is most likely to make fun of someone's laugh?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 156, question: "Who would pretend to know an answer when they don't?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 157, question: "Who is most likely to fall asleep during an important discussion?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 158, question: "Who would trip while trying to look cool?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 159, question: "Who is most likely to make a ridiculous excuse for being late?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 160, question: "Who would post an embarrassing selfie online?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 161, question: "Who is most likely to accidentally walk into a stranger's house?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 162, question: "Who would adopt a stray animal and give it a ridiculous name?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 163, question: "Who is most likely to wear mismatched shoes in public?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 164, question: "Who would accidentally start a small fire in their kitchen?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 165, question: "Who is most likely to believe they've seen a UFO?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 166, question: "Who would end up singing karaoke in the most unexpected place?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 167, question: "Who is most likely to argue with a GPS device?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 168, question: "Who would get caught doing something silly on a security camera?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 169, question: "Who is most likely to wear pajamas to a formal event?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 170, question: "Who would prank call their boss by mistake?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 171, question: "Who in the group is most likely to 'steal someone's heart' without even trying?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 172, question: "Who would 'keep the sparks alive' in the most creative way?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 173, question: "Who is most likely to 'push all the right buttons' on a date?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 174, question: "Who would 'take the slow and scenic route' in building a relationship?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 175, question: "Who is most likely to 'fan the flames of passion' in a relationship?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 176, question: "Who would 'go to great lengths' to win someone over?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 177, question: "Who is most likely to 'ignite something unforgettable'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 178, question: "Who would 'stay in control when things heat up'?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 179, question: "Who is most likely to 'make the first move and succeed'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 180, question: "Who would 'set the bar high for romance'?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 181, question: "Who is most likely to fall in love with their best friend?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 182, question: "Who would try to set up two friends but fail miserably?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 183, question: "Who is most likely to confess their feelings in the most dramatic way?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 184, question: "Who would keep their relationship a secret from the group?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 185, question: "Who is most likely to get dumped over text?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 186, question: "Who would plan the cheesiest surprise for their crush?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 187, question: "Who is most likely to take a breakup the hardest?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 188, question: "Who would go on a blind date set up by their parents?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 189, question: "Who is most likely to send a flirty text to the wrong person?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 190, question: "Who would date someone who looks like their ex?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 191, question: "Who is most likely to get overly competitive in a silly game?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 192, question: "Who would interrupt someone to tell an unrelated story?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 193, question: "Who is most likely to cancel plans because of laziness?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 194, question: "Who would forget a friend's birthday and lie about it?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 195, question: "Who is most likely to embarrass themselves in front of a crush?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 196, question: "Who would hoard all the good snacks during a road trip?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 197, question: "Who is most likely to overthink every little detail?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 198, question: "Who would borrow clothes and return them unwashed?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 199, question: "Who is most likely to forget the punchline of their own joke?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 200, question: "Who would start an argument and then back out?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 201, question: "Who is most likely to build a blanket fort as an adult?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 202, question: "Who would name their pet after a fictional villain?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 203, question: "Who is most likely to accidentally text their boss instead of a friend?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 204, question: "Who would order food in a language they don't understand?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 205, question: "Who is most likely to get stuck in an elevator with someone famous?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 206, question: "Who would break into a song during a serious conversation?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 207, question: "Who is most likely to trip over nothing and blame it on gravity?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 208, question: "Who would wear sunglasses indoors and act cool about it?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 209, question: "Who is most likely to become a viral meme for an embarrassing moment?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 210, question: "Who would join a random parade just for fun?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 211, question: "Who in the group is most likely to 'make a grand entrance that leaves everyone speechless'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 212, question: "Who would 'keep the mystery alive' even in a long-term relationship?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 213, question: "Who is most likely to 'light up the room with their presence'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 214, question: "Who would 'step up their game to impress someone special'?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 215, question: "Who is most likely to 'leave subtle hints about their feelings'?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 216, question: "Who would 'playfully challenge someone to keep things interesting'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 217, question: "Who is most likely to 'keep the chemistry alive in creative ways'?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 218, question: "Who would 'be the life of the party and leave everyone wanting more'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 219, question: "Who is most likely to 'plan a night that no one will forget'?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 220, question: "Who would 'make someone's heart skip a beat' without trying?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 221, question: "Who is most likely to get friend-zoned by their crush?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 222, question: "Who would cry over a breakup but act tough in front of everyone?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 223, question: "Who is most likely to surprise their partner with a handwritten letter?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 224, question: "Who would turn down someone who proposes in public?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 225, question: "Who is most likely to flirt with someone completely out of their league?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 226, question: "Who would date multiple people at the same time?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 227, question: "Who is most likely to get rejected in the funniest way?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 228, question: "Who would break up with someone over something trivial?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 229, question: "Who is most likely to argue with their partner over social media posts?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 230, question: "Who would surprise their partner with an impromptu vacation?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 231, question: "Who is most likely to start an argument over something they don't remember?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 232, question: "Who would lie about knowing a famous person?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 233, question: "Who is most likely to argue about the most trivial things?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 234, question: "Who would wear the same outfit to every party?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 235, question: "Who is most likely to forget someone's name right after meeting them?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 236, question: "Who would make a joke that goes over everyone's head?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 237, question: "Who is most likely to throw a temper tantrum over a small inconvenience?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 238, question: "Who would show up to a party without an invitation?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 239, question: "Who is most likely to ruin a surprise party by accident?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 240, question: "Who would forget they promised to bring snacks to the party?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 241, question: "Who is most likely to believe they can fly for a few seconds?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 242, question: "Who would try to get into a concert without a ticket?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 243, question: "Who is most likely to start a food fight in a fancy restaurant?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 244, question: "Who would accidentally lock themselves out of their own house?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 245, question: "Who is most likely to try and get a free meal by pretending to be famous?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 246, question: "Who would participate in a reality TV show without thinking it through?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 247, question: "Who is most likely to end up with a random stranger's phone?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 248, question: "Who would give the most outlandish excuse for being late?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 249, question: "Who is most likely to start a random dance party in the middle of the street?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 250, question: "Who would prank their own parents and make them laugh about it?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 251, question: "Who in the group is most likely to 'set the tone for a romantic evening'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 252, question: "Who would 'keep someone on their toes with their charm'?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 253, question: "Who is most likely to 'become the ultimate romantic hero in their own love story'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 254, question: "Who would 'let their heart do the talking' in a relationship?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 255, question: "Who is most likely to 'spark an intense connection' with just one conversation'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 256, question: "Who would 'make a first date feel unforgettable'?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 257, question: "Who is most likely to 'sweep someone off their feet with a grand gesture'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 258, question: "Who would 'make a love confession that leaves everyone shocked'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 259, question: "Who is most likely to 'playfully tease their partner until they can't take it anymore'?", category: "Double Meaning", subcategory: "Naughty Hints" },
+	{ id: 260, question: "Who would 'take their time to build an epic romance'?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 261, question: "Who is most likely to fake a proposal to get free food?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 262, question: "Who would get jealous over their partner liking someone's social media post?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 263, question: "Who is most likely to date someone because of their social media followers?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 264, question: "Who would turn down a date with someone because they don't have the same hobbies?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 265, question: "Who is most likely to post too many relationship updates on social media?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 266, question: "Who would send a â€˜good morning' text to their crush every day?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 267, question: "Who is most likely to have a long-distance relationship?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 268, question: "Who would text their partner in the middle of a fight just to get attention?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 269, question: "Who is most likely to get â€˜caught up' in a rebound relationship?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 270, question: "Who would make a grand romantic gesture but get rejected?", category: "Spicy", subcategory: "Relationships & Romance" },
+	{ id: 271, question: "Who is most likely to forget a friend's anniversary?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 272, question: "Who would make a bad first impression but try to fix it with an awkward joke?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 273, question: "Who is most likely to arrive late to their own birthday party?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 274, question: "Who would hide food in their bag at a buffet?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 275, question: "Who is most likely to forget someone's birthday and then pretend they didn't?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 276, question: "Who would take a selfie at an inappropriate time?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 277, question: "Who is most likely to complain about something they're not even involved in?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 278, question: "Who would bring up an embarrassing past story during a group dinner?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 279, question: "Who is most likely to send a cringeworthy text to a boss or superior?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 280, question: "Who would show up to a meeting with food in their teeth?", category: "Offensive", subcategory: "Mockable Traits" },
+	{ id: 281, question: "Who is most likely to end up in an awkward situation at a wedding?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 282, question: "Who would be the first to get lost on a road trip?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 283, question: "Who is most likely to send an embarrassing email to the wrong recipient?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 284, question: "Who would accidentally step into a fountain while trying to impress someone?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 285, question: "Who is most likely to buy an extravagant gift but forget the recipient's name?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 286, question: "Who would try to impress their friends by jumping into a pool fully clothed?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 287, question: "Who is most likely to show up to a party in costume when it's not a costume party?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 288, question: "Who would take a random trip to another city just because?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 289, question: "Who is most likely to get kicked out of a club for being too loud?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 290, question: "Who would walk into a store and end up buying something they didn't need?", category: "Absurd", subcategory: "Wild Scenarios" },
+	{ id: 291, question: "Who in the group is most likely to 'be the mystery person everyone wants to know better'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 292, question: "Who would 'surprise their partner with a thoughtful romantic gift'?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 293, question: "Who is most likely to 'make the first move and leave a lasting impression'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 294, question: "Who would 'plan the perfect evening that leaves their date speechless'?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 295, question: "Who is most likely to 'keep their partner guessing with their charm'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 296, question: "Who would 'be the first to make a bold romantic gesture'?", category: "Double Meaning", subcategory: "Romantic Gestures" },
+	{ id: 297, question: "Who is most likely to 'whisper something sweet and unforgettable into someone's ear'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 298, question: "Who would 'make their partner feel like they are the only one in the room'?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+	{ id: 299, question: "Who is most likely to 'win over their crush with a mix of humor and charm'?", category: "Double Meaning", subcategory: "Flirting & Chemistry" },
+	{ id: 300, question: "Who would 'plan a spontaneous and unforgettable romantic getaway'?", category: "Double Meaning", subcategory: "Romantic Adventures" },
+
+    ];
+
+    let usedQuestions = [];
+    let currentQuestion;
+
+    // Function to get a random question that hasn't been used
+    function getRandomQuestion() {
+      if (usedQuestions.length === questions.length) {
+        usedQuestions = []; // Reset if all questions are used
+      }
+
+      let randomIndex;
+      do {
+        randomIndex = Math.floor(Math.random() * questions.length);
+      } while (usedQuestions.includes(randomIndex));
+
+      usedQuestions.push(randomIndex);
+      return questions[randomIndex];
+    }
+
+    // Function to change background based on subcategory
+    function setBackground(subcategory) {
+      const container = document.getElementById('questionContainer');
+      container.className = `question-container ${subcategory.replace(/ /g, '')}`;
+    }
+
+    // Function to load the next question
+    function loadNextQuestion() {
+      currentQuestion = getRandomQuestion();
+      const questionText = document.getElementById('questionText');
+      questionText.textContent = currentQuestion.question;
+      setBackground(currentQuestion.category);
+    }
+
+    // Initialize first question
+    loadNextQuestion();
+
+    // Add touch event to change question
+    document.getElementById('questionContainer').addEventListener('click', loadNextQuestion);
+  </script>
+
+</body>
+</html>
